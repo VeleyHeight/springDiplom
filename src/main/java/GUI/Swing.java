@@ -33,8 +33,9 @@ public class Swing extends JFrame{
                 String username = loginTextField.getText();
                 String password = new String(passwordField1.getText());
                 if (validateUser(username, password)) {
+                    Optional<Пользователь> user = пользовательServiceGUI.findByЛогин(username);
                     JOptionPane.showMessageDialog(autorizeButton, "Успешная авторизация!");
-                    mainGUI mainGUI = new mainGUI(passwordEncoder, swing);
+                    mainGUI mainGUI = new mainGUI(passwordEncoder, swing, user.get().getНазваниеРоли());
                     mainGUI.setTitle("Hello");
                     mainGUI.setContentPane(mainGUI.getJp());
                     mainGUI.setSize(835, 430);

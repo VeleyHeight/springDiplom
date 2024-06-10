@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 const Login = ({setLoginData}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch('http://localhost:8080/login', {
         method: 'POST',
@@ -19,21 +20,23 @@ const Login = ({setLoginData}) => {
   
       if (response.ok) {
         console.log('Данные успешно отправлены');
-        // Перенаправить пользователя на страницу корзины
+
         const clientData = await response.json();
 
         setLoginData(clientData);
 
         console.log(clientData['id']);
+        navigate('/');
 
       } else {
         const errorData = await response.json();
-        setErrorMessage(errorData.error || 'Произошла ошибка при отправке данных');
+        setErrorMessage('Неверный логин или пароль');
         console.error('Ошибка при отправке данных:', JSON.stringify(errorData, null, 2));
 
       }
     } catch (error) {
       console.error('Ошибка при отправке данных:', error);
+      setErrorMessage('Произошла ошибка при отправке данных');
     }
   };
 
@@ -69,6 +72,9 @@ const Login = ({setLoginData}) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            {errorMessage && (
+                <p className="text-red-500 mb-4">{errorMessage}</p>
+            )}
           </div>
           
           <p className="my-4 text-sm text-gray-500">

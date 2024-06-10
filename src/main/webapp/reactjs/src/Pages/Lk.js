@@ -17,8 +17,10 @@ export const Lk = ({loginData, setLoginData}) => {
                 >
                     Данные аккаунта
                 </button>
+
                 <Link to={"/login"}>
-                    <button className="bg-yellow-500 w-full text-gray-800 font-bold py-2 px-8 rounded-lg text-xl my-2" onClick={handleLogout}
+                    <button className="bg-yellow-500 w-full text-gray-800 font-bold py-2 px-8 rounded-lg text-xl my-2"
+                            onClick={handleLogout}
                     >
                         Выйти
                     </button>

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import {useNavigate} from "react-router-dom";
 
 export default function RegistrationForm() {
   const [isCompany, setIsCompany] = useState(true);
   const [mainCompany, setMainCompany] = useState('');
-
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
   const handleRadioChange = (e) => {
     setIsCompany(e.target.value === 'company');
     if (e.target.value === 'company') {
@@ -12,7 +14,48 @@ export default function RegistrationForm() {
       setMainCompany('');
     }
   };
+  function sendFormData(event,isCompany, mainCompany) {
+    event.preventDefault();
 
+    const formData = {
+      login: document.getElementById('login').value,
+      password: document.getElementById('password').value,
+      passwordConfirm: document.getElementById('passwordConfirm').value,
+      companyName: document.getElementById('companyName').value,
+      address: document.getElementById('address').value,
+      region: document.getElementById('region').value,
+      inn: document.getElementById('inn').value,
+      kpp: isCompany ? '' : document.getElementById('kpp').value,
+      lastName: document.getElementById('lastName').value,
+      firstName: document.getElementById('firstName').value,
+      patronymic: document.getElementById('patronymic').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      isCompany: isCompany,
+      mainCompany: mainCompany
+    };
+
+    fetch('http://localhost:8080/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+        .then(response => {
+          if (response.ok) {
+            console.log('Данные успешно отправлены');
+            navigate('/login');
+          } else {
+            setErrorMessage('Ошибка при заполнении данных');
+            console.error('Ошибка при отправке данных');
+          }
+        })
+        .catch(error => {
+          setErrorMessage('Ошибка при заполнении данных');
+          console.error('Ошибка при отправке данных:', error);
+        });
+  }
   return (
     <div className="min-h-screen bg-gray-300 flex items-center justify-center p-4">
       <div className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 max-w-md w-full">
@@ -279,52 +322,18 @@ export default function RegistrationForm() {
                 placeholder="Телефон"
                 required
               />
+
             </div>
+          {errorMessage && (
+              <p className="text-red-500 mb-4">{errorMessage}</p>
+          )}
           <div className="bg-yellow-500 text-gray-700 font-bold py-2 px-4 rounded-full flex justify-center mt-8"
               type="submit">
+
           <button className="justify-center" type="submit">Зарегистрироваться</button>
           </div>
         </form>
       </div>
     </div>
   );
-}
-function sendFormData(event,isCompany, mainCompany) {
-  event.preventDefault();
-
-  const formData = {
-    login: document.getElementById('login').value,
-    password: document.getElementById('password').value,
-    passwordConfirm: document.getElementById('passwordConfirm').value,
-    companyName: document.getElementById('companyName').value,
-    address: document.getElementById('address').value,
-    region: document.getElementById('region').value,
-    inn: document.getElementById('inn').value,
-    kpp: isCompany ? '' : document.getElementById('kpp').value,
-    lastName: document.getElementById('lastName').value,
-    firstName: document.getElementById('firstName').value,
-    patronymic: document.getElementById('patronymic').value,
-    email: document.getElementById('email').value,
-    phone: document.getElementById('phone').value,
-    isCompany: isCompany,
-    mainCompany: mainCompany
-  };
-
-  fetch('http://localhost:8080/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(formData)
-  })
-  .then(response => {
-    if (response.ok) {
-      console.log('Данные успешно отправлены');
-    } else {
-      console.error('Ошибка при отправке данных');
-    }
-  })
-  .catch(error => {
-    console.error('Ошибка при отправке данных:', error);
-  });
 }

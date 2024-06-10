@@ -225,7 +225,17 @@ public class mainGUI extends JFrame {
                 return jp11;
         }
     }
-    public mainGUI(PasswordEncoder passwordEncoder,Swing swingForm) {
+    public mainGUI(PasswordEncoder passwordEncoder,Swing swingForm, String role) {
+        if(role.equals("Менеджер по поставщикам")){
+            userOpen.setVisible(false);
+            jClient.setVisible(false);
+            menuZakaz.setVisible(false);
+            sostavZakaza.setVisible(false);
+        }
+        else if(role.equals("Менеджер по продажам")){
+            postavshikItem.setVisible(false);
+            userOpen.setVisible(false);
+        }
         this.passwordEncoder = passwordEncoder;
         this.swingForm = swingForm;
         tableName = "Заказ";

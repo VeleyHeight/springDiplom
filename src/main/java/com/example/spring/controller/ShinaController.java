@@ -107,7 +107,6 @@ public class ShinaController {
             String phoneNumber = (String) lkData.get("phone_number");
             String email = (String) lkData.get("email");
 
-
                 клиентService.updateКлиент(clientCode, firm, mainOrganization, inn, kpp, address, region, companyFormUR, companyFormIP,
                         clientSurname, clientName, clientPatronymic, phoneNumber, email);
 
